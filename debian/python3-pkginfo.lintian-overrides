@@ -1,0 +1,4 @@
+python3-pkginfo: copyright-without-copyright-notice
+python3-pkginfo: initial-upload-closes-no-bugs
+python3-pkginfo: no-manual-page
+python3-pkginfo: zero-byte-file-in-doc-directory

@@ -1,0 +1,4 @@
+python-pkginfo source: no-debian-changes
+python-pkginfo source: source-contains-prebuilt-windows-binary
+python-pkginfo source: source-is-missing
+python-pkginfo source: source-package-encodes-python-version
