@@ -1,7 +1,7 @@
 ``pkginfo`` Changelog
 =====================
 
-1.13.0 (unreleased)
+1.13.0 (2026-08-29)
 -------------------
 
 - Support 'metadata_version' == '2.5' (PEP 794).  LP #2165813
