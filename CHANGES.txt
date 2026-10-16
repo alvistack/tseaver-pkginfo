@@ -1,6 +1,11 @@
 ``pkginfo`` Changelog
 =====================
 
+1.13.3 (2026-10-16)
+-------------------
+
+- Remove dead branch in 'wheel.Wheel._extract_purelib'.
+
 1.13.2 (2026-10-16)
 -------------------
 
