@@ -4,6 +4,12 @@
 1.13.2 (unreleased)
 -------------------
 
+- Anchor candidate matching for installed distribution metadata at the
+  ``<name>-<version>`` boundary, such that a package whose name is a
+  strict prefix of another installed package's name no longer has its
+  metadata masked by that other package (e.g. 'pyramid' vs.
+  'pyramid_chameleon').  LP #1974172.  GH #9
+
 - Test installed distributions against the metadata version recorded in
   their own ``PKG-INFO`` / ``METADATA`` files, rather than against
   hardcoded literals which drift with the packaging toolchain.
