@@ -1,7 +1,7 @@
 ``pkginfo`` Changelog
 =====================
 
-1.13.2 (unreleased)
+1.13.2 (2026-10-16)
 -------------------
 
 - Add ``Wheel`` support for exposing the PEP 427 tags encoded in the wheel
