@@ -26,7 +26,7 @@ setup(
     long_description='\n\n'.join([README, CHANGES]),
     long_description_content_type='text/x-rst',
     keywords='distribution sdist installed metadata',
-    url='https://code.launchpad.net/~tseaver/pkginfo/trunk',
+    url='https://github.com/tseaver/pkginfo',
     author='Tres Seaver, Agendaless Consulting',
     author_email='tseaver@agendaless.com',
     license='MIT',
