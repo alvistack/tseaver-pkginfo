@@ -1,6 +1,16 @@
 ``pkginfo`` Changelog
 =====================
 
+1.13.1 (unreleased)
+-------------------
+
+- Test ``Installed`` distributions against the fixture's own ``PKG-INFO``,
+  rather than against the version of the installed ``pkginfo`` package;
+  ``Develop`` tests now check the live project metadata against the
+  installed package's recorded version.  Fixes failures of the released
+  sdist's test suite under other versions (``namespaced.dodgy`` egg-info
+  carries a snapshot stamped during development).  GH #1
+
 1.13.0 (2026-08-29)
 -------------------
 
