@@ -56,9 +56,9 @@ def _unpack(tempdir, filename):
         archive.close()
 
 @pytest.fixture()
-def unpacked_dir(temp_dir, archive):
-    _unpack(temp_dir, archive)
-    return _top_dir(temp_dir)
+def unpacked_dir(tmp_path, archive):
+    _unpack(tmp_path, archive)
+    return _top_dir(tmp_path)
 
 @pytest.mark.parametrize("factory", [_make_sdist, _make_unpacked_sdist])
 def test_sdist_ctor_w_invalid_filename(examples_dir, factory):

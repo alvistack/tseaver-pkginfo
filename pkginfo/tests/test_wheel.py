@@ -153,14 +153,14 @@ def test_wheel_filename_tags_w_unparseable(examples_dir):
     assert(wheel.build_tag == None)
     assert(wheel.purelib == None)
 
-def test_wheel_ctor_w_valid_installed_wheel(temp_dir, test_wheel):
+def test_wheel_ctor_w_valid_installed_wheel(tmp_path, test_wheel):
 
     filename = str(test_wheel)
 
     with zipfile.ZipFile(filename) as zipf:
-        zipf.extractall(temp_dir)
+        zipf.extractall(tmp_path)
 
-    installed_filename = temp_dir / 'mypackage-0.1.dist-info'
+    installed_filename = tmp_path / 'mypackage-0.1.dist-info'
     wheel = _make_wheel(str(installed_filename))
 
     assert(wheel.metadata_version == '2.0')

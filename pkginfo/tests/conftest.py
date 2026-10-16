@@ -33,11 +33,6 @@ def test_wheel(examples_dir):
     yield examples_dir / 'mypackage-0.1-cp26-none-linux_x86_64.whl'
 
 @pytest.fixture
-def temp_dir():
-    with tempfile.TemporaryDirectory() as tmpdir:
-        return pathlib.Path(tmpdir)
-
-@pytest.fixture
 def sys_path():
     oldpath = sys.path[:]
     try:
