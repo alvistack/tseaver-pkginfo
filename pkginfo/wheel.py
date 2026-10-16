@@ -39,8 +39,6 @@ class Wheel(Distribution):
         # and is True iff the archive contents install into 'purelib'
         # (vs. 'platlib');  pure wheels built without extensions are
         # tagged 'any' for the platform.
-        if not metadata_path.endswith('METADATA'):
-            return
         wheel_name = metadata_path[:-len('METADATA')] + 'WHEEL'
         if wheel_name not in names:
             return
