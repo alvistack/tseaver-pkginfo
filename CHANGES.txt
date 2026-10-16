@@ -1,6 +1,14 @@
 ``pkginfo`` Changelog
 =====================
 
+1.13.2 (unreleased)
+-------------------
+
+- Test installed distributions against the metadata version recorded in
+  their own ``PKG-INFO`` / ``METADATA`` files, rather than against
+  hardcoded literals which drift with the packaging toolchain.
+  LP #2103804.  GH #10
+
 1.13.1 (2026-10-16)
 -------------------
 
