@@ -1,7 +1,7 @@
 ``pkginfo`` Changelog
 =====================
 
-1.13.1 (unreleased)
+1.13.1 (2026-10-16)
 -------------------
 
 - Test ``Installed`` distributions against the fixture's own ``PKG-INFO``,
