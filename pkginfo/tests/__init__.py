@@ -56,4 +56,6 @@ def _checkClassifiers(_, installed):
 
 
 def _defaultMetadataVersion():
-    return '2.1'
+    # Cross-check against the sample's own metadata, rather than a
+    # hardcoded literal (LP #2103804).  See GH #10.
+    return _fixture_pkginfo()['Metadata-Version']

@@ -129,13 +129,22 @@ def test_installed_ctor_w_egg_info_as_file():
     assert(installed.package_name == 'pkginfo.tests.funny')
 
 def test_installed_ctor_w_dist_info():
-    from packaging import version
     import wheel
 
     installed = _make_installed('wheel')
 
     assert(installed.package == wheel)
     assert(installed.package_name == 'wheel')
+
+    # Cross-check the parsed metadata version against the metadata
+    # recorded in wheel's own dist-info, rather than a version- or
+    # toolchain-dependent literal (LP #2103804, GH #10).
+    from email.parser import Parser
+    from importlib import metadata as importlib_metadata
+
+    expected = Parser().parsestr(
+        importlib_metadata.distribution('wheel').read_text('METADATA'))
+    assert(installed.metadata_version == expected['Metadata-Version'])
 
 def test_installed_namespaced_pkg_installed_via_setuptools(wonky):
 
