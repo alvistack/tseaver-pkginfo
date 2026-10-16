@@ -124,6 +124,25 @@ generated via ``setup.py bdist_wheel``.
 
   >>> mypackage = Wheel('docs/examples/mypackage-0.1-cp26-none-linux_x86_64.whl')
 
+In addition to the metadata attributes, ``Wheel`` objects expose both the
+PEP 427 tags encoded in the wheel filename (``python_tag``, ``abi_tag``,
+``platform_tag``, and ``build_tag``), and the ``Root-Is-Purelib`` setting
+recorded in the archive's ``WHEEL`` file via ``purelib``.  Pure wheels,
+built without native extensions, are tagged ``any`` for the platform and
+report ``purelib`` as ``True``:  the closest available signal for whether
+the wheel contains native code.
+
+.. doctest::
+
+  >>> mypackage.python_tag
+  'cp26'
+  >>> mypackage.platform_tag
+  'linux_x86_64'
+  >>> mypackage.build_tag is None
+  True
+  >>> mypackage.purelib
+  False
+
 After that, they have the same metadata as other ``Distribution`` objects,
 
 
