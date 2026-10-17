@@ -7,7 +7,7 @@ where = ["src"]
 
 [project]
 name = "pkginfo"
-version = "1.14dev0"
+version = "2.0b1"
 description = "Query metadata from sdists / bdists / installed packages"
 readme = {file = "README.rst", content-type = "text/x-rst"}
 requires-python = ">=3.11"
