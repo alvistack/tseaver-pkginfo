@@ -4,7 +4,9 @@
 1.14.0 (unreleased)
 -------------------
 
-- TBD
+- Add Python 3.15 support (released 2026-10-09).
+
+- Drop Python 3.10 support (EOL 2026-10-01).
 
 1.13.0 (unreleased)
 -------------------
