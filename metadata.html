@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Metadata Versions &#8212; pkginfo 2.0b1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=72df5dcf"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Distribution Indexes" href="indexes.html" />
+    <link rel="prev" title="Distribution Types" href="distributions.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="metadata-versions">
+<h1>Metadata Versions<a class="headerlink" href="#metadata-versions" title="Link to this heading">¶</a></h1>
+<p>The allowed <code class="docutils literal notranslate"><span class="pre">PKG-INFO</span></code> fields and their semantics are defined in a series
+of PEPs, each of which updates the metadata version field.</p>
+<ul class="simple">
+<li><p>Metadata version 1.0 is specified in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0241.txt">PEP 241</a>.</p></li>
+<li><p>Metadata version 1.1 is specified in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0314.txt">PEP 314</a>.</p></li>
+<li><p>Metadata version 1.2 is specified in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0345.txt">PEP 345</a>.</p></li>
+<li><p>Metadata version 2.0 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0426.txt">PEP 426</a>. (eventually withdrawn)</p></li>
+<li><p>Metadata version 2.1 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0566.txt">PEP 566</a>.</p></li>
+<li><p>Metadata version 2.2 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0643.txt">PEP 643</a>.</p></li>
+<li><p>Metadata version 2.3 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0685.txt">PEP 685</a>.</p></li>
+<li><p>Metadata version 2.4 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0639.txt">PEP 639</a>. (long approval cycle)</p></li>
+<li><p>Metadata version 2.5 was proposed in <a class="reference external" href="http://svn.python.org/projects/peps/trunk/pep-0794.txt">PEP 794</a>.</p></li>
+</ul>
+<p>A given <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> object parses / exposes the attributes which
+correspond to the metadata version specified in its <code class="docutils literal notranslate"><span class="pre">PKG-INFO</span></code>.</p>
+<p>You can override the metadata version stored in a given distribution by
+passing the specific version (as a string) to its constructor. E.g.,
+updating the metadata version here in order to expose the classifiers,
+which were not defined under version ‘1.0’:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span> <span class="o">=</span> <span class="n">SDist</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1.tar.gz'</span><span class="p">,</span>
+<span class="gp">... </span>                  <span class="n">metadata_version</span><span class="o">=</span><span class="s1">'1.1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mypackage</span><span class="o">.</span><span class="n">classifiers</span><span class="p">])</span>
+<span class="go">['Development Status :: 4 - Beta', 'Environment :: Console (Text Based)']</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pkginfo</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Distribution Types</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Metadata Versions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">Distribution Indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="distributions.html" title="previous chapter">Distribution Types</a></li>
+      <li>Next: <a href="indexes.html" title="next chapter">Distribution Indexes</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2009-2026, Tres Seaver.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/metadata.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

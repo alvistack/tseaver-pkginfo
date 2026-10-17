@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Development &#8212; pkginfo 2.0b1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=72df5dcf"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Distribution Indexes" href="indexes.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="development">
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h1>
+<section id="requirements-and-tooling">
+<h2>Requirements and tooling<a class="headerlink" href="#requirements-and-tooling" title="Link to this heading">¶</a></h2>
+<p>The packaging metadata, and the test / tool dependency groups, live in
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.  <a class="reference external" href="https://uv.astral.sh">uv</a> manages the development
+environment and its lockfile (<code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
+</pre></div>
+</div>
+<p>The local gates are driven by <code class="docutils literal notranslate"><span class="pre">tox</span></code>, configured natively inside
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> (<cite>[tool.tox]</cite>), using uv’s venv runner (<cite>tox-uv</cite>).</p>
+</section>
+<section id="dependency-groups">
+<h2>Dependency groups<a class="headerlink" href="#dependency-groups" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">[dependency-groups]</span></code> section (PEP 735) of <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> defines
+the following groups:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">test</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">pytest</span></code>, <code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code>, <code class="docutils literal notranslate"><span class="pre">coverage</span></code>, <code class="docutils literal notranslate"><span class="pre">wheel</span></code>: everything needed
+to run the test suite, including the <code class="docutils literal notranslate"><span class="pre">wheel</span></code> package, which is used
+by tests as the subject of installed-wheel introspection.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">dev</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">tox</span></code>, <code class="docutils literal notranslate"><span class="pre">tox-uv</span></code>, <code class="docutils literal notranslate"><span class="pre">uv</span></code>: the tools which drive the gates.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">typechecking</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">mypy</span></code>, <code class="docutils literal notranslate"><span class="pre">types-setuptools</span></code>: type-checking the sources and verifying
+that the in-tree <code class="docutils literal notranslate"><span class="pre">*.pyi</span></code> stubs do not drift.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">docs</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">sphinx</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">lint</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">ruff</span></code>, <code class="docutils literal notranslate"><span class="pre">check-manifest</span></code>, <code class="docutils literal notranslate"><span class="pre">breezy</span></code>, <code class="docutils literal notranslate"><span class="pre">build</span></code>, <code class="docutils literal notranslate"><span class="pre">twine</span></code>: source
+linting, sdist manifest checking, and release tooling.</p>
+</dd>
+</dl>
+<p>The project itself has no runtime dependencies, and none of these groups
+affect the published distribution metadata: they are development-only
+concerns, per PEP 735.</p>
+</section>
+<section id="gates">
+<h2>Gates<a class="headerlink" href="#gates" title="Link to this heading">¶</a></h2>
+<p>The following gates are runnable via <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">&lt;env&gt;</span></code> (or simply
+<code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">&lt;env&gt;</span></code>):</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">py311</span></code> … <code class="docutils literal notranslate"><span class="pre">py315</span></code>, <code class="docutils literal notranslate"><span class="pre">pypy312</span></code></dt><dd><p>The test suite against each supported interpreter, recording coverage
+data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">cover</span></code></dt><dd><p>Aggregated cross-interpreter coverage report, gated at 100%.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mypy</span></code></dt><dd><p>Static type checking, plus <code class="docutils literal notranslate"><span class="pre">stubtest</span></code> against each module’s stubs (on
+Python 3.12; see the note about newer-interpreter dunders in the
+config).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">docs</span></code></dt><dd><p>Building the HTML documentation, and running the narrative doctests.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">manifest</span></code></dt><dd><p>Checking that the sdist contents match the version control state: the
+test fixtures and type stubs must ship inside the sdist, while
+development files (e.g., <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code>) must not.</p>
+</dd>
+</dl>
+<p>The same checks run in the GitHub Actions workflow (<code class="docutils literal notranslate"><span class="pre">.github/workflows/ci.yml</span></code>)
+without involving tox, as an independent check of the toolchain.</p>
+</section>
+<section id="test-layout">
+<h2>Test layout<a class="headerlink" href="#test-layout" title="Link to this heading">¶</a></h2>
+<p>The test suite lives at <code class="docutils literal notranslate"><span class="pre">tests/unit</span></code>, outside the <code class="docutils literal notranslate"><span class="pre">pkginfo</span></code> package:
+test modules import the APIs under test inside test functions and helpers
+(see <code class="docutils literal notranslate"><span class="pre">tests/unit/_helpers.py</span></code> for the shared checkers).  Test fixtures
+which emulate <em>installed</em> distributions (e.g., <code class="docutils literal notranslate"><span class="pre">dodgy</span></code>, <code class="docutils literal notranslate"><span class="pre">manky</span></code>,
+<code class="docutils literal notranslate"><span class="pre">wonky</span></code>, <code class="docutils literal notranslate"><span class="pre">tricky</span></code>) are package trees placed on <code class="docutils literal notranslate"><span class="pre">sys.path</span></code> by the
+fixtures in <code class="docutils literal notranslate"><span class="pre">tests/unit/conftest.py</span></code>;  their metadata files are
+hand-maintained data, checked into version control, not generated by
+builds.</p>
+</section>
+<section id="release-process">
+<h2>Release process<a class="headerlink" href="#release-process" title="Link to this heading">¶</a></h2>
+<p>Releases are tagged with signed tags:  the body of the tag carries the
+release’s changelog entries, rendered as the release notes via the GitHub
+releases page.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git tag -s -F &lt;changelog-body.txt&gt; v1.14.0
+$ git push origin v1.14.0
+</pre></div>
+</div>
+<p>The sdist and wheel are built, checked, and published using the tools in
+the <code class="docutils literal notranslate"><span class="pre">lint</span></code> group:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ uv run build
+$ uv run twine check dist/*
+$ uv run twine upload dist/*
+</pre></div>
+</div>
+<p>Creating and publishing the release itself (e.g., via
+<code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">release</span> <span class="pre">create</span></code>) is what actually publishes to PyPI:  the release
+workflow (<code class="docutils literal notranslate"><span class="pre">.github/workflows/pypi.yml</span></code>) reacts to the <code class="docutils literal notranslate"><span class="pre">release</span> <span class="pre">published</span></code>
+event, verifying that the release’s tag matches the version declared in
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, building the sdist and wheel, and publishing them via
+PyPI’s Trusted Publisher mechanism.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Changelog</span></code> project URL points at the
+<a class="reference external" href="https://github.com/tseaver/pkginfo/releases">releases page</a>, which is
+the canonical changelog;  release <code class="docutils literal notranslate"><span class="pre">1.13.3</span></code> was the last tracked in the
+repo’s own <code class="docutils literal notranslate"><span class="pre">CHANGES.txt</span></code> file.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pkginfo</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Distribution Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Versions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">Distribution Indexes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements-and-tooling">Requirements and tooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependency-groups">Dependency groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gates">Gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-layout">Test layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-process">Release process</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="indexes.html" title="previous chapter">Distribution Indexes</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2009-2026, Tres Seaver.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/development.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

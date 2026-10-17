@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Distribution Types &#8212; pkginfo 2.0b1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=72df5dcf"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Metadata Versions" href="metadata.html" />
+    <link rel="prev" title="pkginfo documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="distribution-types">
+<h1>Distribution Types<a class="headerlink" href="#distribution-types" title="Link to this heading">¶</a></h1>
+<p>The fundamental abstraction provided by this pacakge is the <code class="docutils literal notranslate"><span class="pre">Distribution</span></code>
+base class.  Implementations exist for specific cases:  source distributions,
+binary distributions, installed packages, and development checkouts.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Distribution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">SDist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">SDist</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnpackedSDist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">UnpackedSDist</span><span class="p">,</span> <span class="n">SDist</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">BDist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">BDist</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wheel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">Wheel</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Installed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">Installed</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Develop</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">Develop</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="introspecting-source-distributions">
+<h2>Introspecting Source Distributions<a class="headerlink" href="#introspecting-source-distributions" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SDist</span></code> objects are created from a filesystem path to the corresponding
+archive, which should have been created via the <code class="docutils literal notranslate"><span class="pre">sdist</span></code> command from
+distutils:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span> <span class="o">=</span> <span class="n">SDist</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1.tar.gz'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After creation, the <code class="docutils literal notranslate"><span class="pre">SDist</span></code> instance will have attributes corresponding
+the the fields defined in the PEP corresponding to the metadata version,
+lower-cased and transliterated into valid Python identifiers by mapping
+hyphens to underscores.  E.g.:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">metadata_version</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="go">mypackage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="go">0.1</span>
+</pre></div>
+</div>
+<p>Fields which are optional under the PEP, and which have no value set
+in their <code class="docutils literal notranslate"><span class="pre">PKG-INFO</span></code>, will map to the value <code class="docutils literal notranslate"><span class="pre">None</span></code>:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">keywords</span><span class="p">)</span>
+<span class="go">None</span>
+</pre></div>
+</div>
+<p>Fields which are marked “multiple use” under the PEP map onto sequences;
+their names are pluralized to indicate the sequence.  “Multiple use” fields
+with no occurrences in the <code class="docutils literal notranslate"><span class="pre">PKG-INFO</span></code> file will map onto an empty sequence:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">supported_platforms</span><span class="p">))</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="metadata.html">Metadata Versions</a> for an example with a non-empty,
+“multiple-use” field.</p>
+</section>
+<section id="introspecting-unpacked-source-distributions">
+<h2>Introspecting Unpacked Source Distributions<a class="headerlink" href="#introspecting-unpacked-source-distributions" title="Link to this heading">¶</a></h2>
+<p>You can also introspect a previously-unpacked package with <code class="docutils literal notranslate"><span class="pre">UnpackedSDist</span></code>
+either by passing it the path to the unpacked package, or by passing it the
+setup.py at the top level:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span> <span class="o">=</span> <span class="n">UnpackedSDist</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mypackage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="go">mypackage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myotherpackage</span> <span class="o">=</span> <span class="n">UnpackedSDist</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1/setup.py'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">myotherpackage</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="go">mypackage</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">UnpackedSDist</span></code> objects are most useful in conjunction with distutils to
+produce sdists that want complex behavior for determining what metadata to use;
+these sdists normally break when installed with <code class="docutils literal notranslate"><span class="pre">pip</span></code>, because metadata in an
+sdist is regenerated when pip installed. You can achieve this in your
+<cite>setup.py</cite> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">setuptools</span><span class="w"> </span><span class="kn">import</span> <span class="n">dist</span><span class="p">,</span> <span class="n">setup</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="o">.</span><span class="n">Distribution</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">setup_requires</span><span class="o">=</span><span class="s1">'pkginfo'</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pkginfo</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnpackedSDist</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">d</span> <span class="o">=</span> <span class="n">UnpackedSDist</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">VERSION</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">version</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">VERSION</span> <span class="o">=</span> <span class="p">(</span><span class="n">version_from_source_control</span><span class="p">()</span> <span class="ow">or</span>
+<span class="gp">... </span>               <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">'VERSION'</span><span class="p">,</span> <span class="s1">'1.0'</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'mypackage'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">VERSION</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="introspecting-binary-distributions">
+<h2>Introspecting Binary Distributions<a class="headerlink" href="#introspecting-binary-distributions" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">BDist</span></code> objects are created from the filename, which should have been
+generated via <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">bdist_egg</span></code>.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span> <span class="o">=</span> <span class="n">BDist</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1-py2.6.egg'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After that, they have the same metadata as other <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> objects,</p>
+</section>
+<section id="introspecting-wheels">
+<h2>Introspecting Wheels<a class="headerlink" href="#introspecting-wheels" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Wheel</span></code> objects are created from the filename, which should have been
+generated via <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">bdist_wheel</span></code>.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="s1">'docs/examples/mypackage-0.1-cp26-none-linux_x86_64.whl'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition to the metadata attributes, <code class="docutils literal notranslate"><span class="pre">Wheel</span></code> objects expose both the
+PEP 427 tags encoded in the wheel filename (<code class="docutils literal notranslate"><span class="pre">python_tag</span></code>, <code class="docutils literal notranslate"><span class="pre">abi_tag</span></code>,
+<code class="docutils literal notranslate"><span class="pre">platform_tag</span></code>, and <code class="docutils literal notranslate"><span class="pre">build_tag</span></code>), and the <code class="docutils literal notranslate"><span class="pre">Root-Is-Purelib</span></code> setting
+recorded in the archive’s <code class="docutils literal notranslate"><span class="pre">WHEEL</span></code> file via <code class="docutils literal notranslate"><span class="pre">purelib</span></code>.  Pure wheels,
+built without native extensions, are tagged <code class="docutils literal notranslate"><span class="pre">any</span></code> for the platform and
+report <code class="docutils literal notranslate"><span class="pre">purelib</span></code> as <code class="docutils literal notranslate"><span class="pre">True</span></code>:  the closest available signal for whether
+the wheel contains native code.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span><span class="o">.</span><span class="n">python_tag</span>
+<span class="go">'cp26'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span><span class="o">.</span><span class="n">platform_tag</span>
+<span class="go">'linux_x86_64'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span><span class="o">.</span><span class="n">build_tag</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mypackage</span><span class="o">.</span><span class="n">purelib</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>After that, they have the same metadata as other <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> objects,</p>
+</section>
+<section id="introspecting-installed-packages">
+<h2>Introspecting Installed Packages<a class="headerlink" href="#introspecting-installed-packages" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Installed</span></code> objects are created from either a module object or its
+dotted name.  Note that this feature only works in Python 2.6 or later:
+earlier Python versions did not record <code class="docutils literal notranslate"><span class="pre">PKG-INFO</span></code> for installed packages.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">dotted</span> <span class="o">=</span> <span class="n">Installed</span><span class="p">(</span><span class="s1">'pkginfo'</span><span class="p">)</span>
+<span class="gp">... </span>   <span class="kn">import</span><span class="w"> </span><span class="nn">pkginfo</span>
+<span class="gp">... </span>   <span class="n">direct</span> <span class="o">=</span> <span class="n">Installed</span><span class="p">(</span><span class="n">pkginfo</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After that, they have the same metadata as other <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> objects,
+assuming that the package on which they were based has a discoverable
+‘.egg-info’ file / directory.  To be discoverable, the ‘.egg-info’ must
+either be located inside the package (e.g., created via <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">develop</span></code>
+under setuptools), or adjacent to the package (e.g., created via
+<code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">install</span></code>).</p>
+</section>
+<section id="introspecting-development-checkouts">
+<h2>Introspecting Development Checkouts<a class="headerlink" href="#introspecting-development-checkouts" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Develop</span></code> objects are created from a path to a checkout containing
+a <code class="docutils literal notranslate"><span class="pre">PKG-iNFO</span></code> file, e.g., created by running <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">develop</span></code> under
+setuptools.</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">develop</span> <span class="o">=</span> <span class="n">Develop</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After that, they have the same metadata as other <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> objects.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pkginfo</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Distribution Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-source-distributions">Introspecting Source Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-unpacked-source-distributions">Introspecting Unpacked Source Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-binary-distributions">Introspecting Binary Distributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-wheels">Introspecting Wheels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-installed-packages">Introspecting Installed Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introspecting-development-checkouts">Introspecting Development Checkouts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Versions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">Distribution Indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pkginfo</span></code> documentation</a></li>
+      <li>Next: <a href="metadata.html" title="next chapter">Metadata Versions</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2009-2026, Tres Seaver.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/distributions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
