@@ -1,16 +1,17 @@
-# GitHub-based CI, mirroring the local 'tox' gate:
+# GitHub-based CI, mirroring the local 'tox' gate (now backed by tox-uv):
 #
-#   tox env       CI job(s)
-#   ---------     -------------------------------------------------
-#   py310..py314  'test' (matrix w/ per-version coverage data)
-#   + pypy3
-#   cover         'coverage' (combined report, --fail-under=100)
-#   mypy          'mypy' (incl. per-module stubtest drift checks)
-#   manifest      'manifest'
-#   docs          'docs' (html + doctest builds)
+#   tox env        CI job(s)
+#   ---------      -------------------------------------------------
+#   py311..py315   'test' (matrix w/ per-version coverage data)
+#   + pypy312
+#   cover          'coverage' (combined report, --fail-under=100)
+#   mypy           'mypy' (incl. per-module stubtest drift checks;
+#                   deps from the 'typechecking' dependency group)
+#   manifest       'manifest'
+#   docs           'docs' (html + doctest builds)
 #
-# Intentionally does NOT use tox, as belt-and-suspenders during the
-# modernization effort (#5), until releases get automated (#6).
+# Intentionally does NOT use tox (or uv), as belt-and-suspenders during
+# the modernization effort (#5), until releases get automated (#6).
 
 name: CI
 
@@ -46,10 +47,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: setup.py
+          cache-dependency-path: pyproject.toml
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
 
       - name: Install
-        run: python -m pip install -e '.[testing]'
+        run: python -m pip install -e . --group test
 
       - name: Run tests, recording coverage data
         env:
@@ -107,12 +111,13 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: setup.py
+          cache-dependency-path: pyproject.toml
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
 
       - name: Install
-        run: |
-          python -m pip install -e .
-          python -m pip install 'mypy==0.991' types-setuptools
+        run: python -m pip install -e . --group typechecking
 
       - name: Type-check sources and stubs
         run: |
@@ -137,7 +142,7 @@ jobs:
         with:
           python-version: '3.13'
           cache: pip
-          cache-dependency-path: setup.py
+          cache-dependency-path: pyproject.toml
 
       - name: Install
         run: python -m pip install check-manifest
@@ -155,12 +160,13 @@ jobs:
         with:
           python-version: '3.13'
           cache: pip
-          cache-dependency-path: setup.py
+          cache-dependency-path: pyproject.toml
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
 
       - name: Install
-        run: |
-          python -m pip install -e .
-          python -m pip install Sphinx
+        run: python -m pip install -e . --group docs
 
       - name: Build HTML docs
         run: sphinx-build -b html -d docs/_build/doctrees docs docs/_build/html

@@ -16,3 +16,4 @@ Contents:
    distributions
    metadata
    indexes
+   development
