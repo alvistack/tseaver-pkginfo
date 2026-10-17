@@ -102,6 +102,13 @@ the ``lint`` group::
    $ uv run twine check dist/*
    $ uv run twine upload dist/*
 
+Creating and publishing the release itself (e.g., via
+``gh release create``) is what actually publishes to PyPI:  the release
+workflow (``.github/workflows/pypi.yml``) reacts to the ``release published``
+event, verifying that the release's tag matches the version declared in
+``pyproject.toml``, building the sdist and wheel, and publishing them via
+PyPI's Trusted Publisher mechanism.
+
 The ``Changelog`` project URL points at the
 `releases page <https://github.com/tseaver/pkginfo/releases>`_, which is
 the canonical changelog;  release ``1.13.3`` was the last tracked in the

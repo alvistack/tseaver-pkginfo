@@ -1,0 +1,113 @@
+# Release automation (GH #6):  push to PyPI via Trusted Publishing.
+#
+# The PyPI 'pkginfo' project's Trusted Publisher Management registration
+# must match this workflow exactly:
+#
+#   owner:        tseaver
+#   repository:   pkginfo
+#   workflow:     pypi.yml
+#   environment:  pypi
+#
+# Trigger:  creating a GitHub release for the repo (which publishes the
+# signed tags whose bodies carry the release's changelog entries; see
+# "Development" in the docs).
+
+name: Publish release to PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
+
+      - name: Verify release tag matches declared version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          python -c "
+          import os
+          import pathlib
+          import tomllib
+
+          version = tomllib.loads(
+              pathlib.Path('pyproject.toml').read_text())['project']['version']
+          tag = os.environ['RELEASE_TAG']
+          tag = tag[1:] if tag.startswith('v') else tag
+          assert version == tag, f'{tag} != {version}'
+          print(f'release tag / pyproject version == {tag}')
+          "
+
+      - name: Install build tooling
+        run: |
+          python -m pip install -U pip
+          python -m pip install --group lint
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Check distributions
+        run: twine check dist/*
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: publish to PyPI (trusted publisher)
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verify-metadata: true
+          print-hash: true
+
+  attach:
+    name: attach distributions to the GitHub release
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Attach distributions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload "${RELEASE_TAG}" dist/* --clobber
