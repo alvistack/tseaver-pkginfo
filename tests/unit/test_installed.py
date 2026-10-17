@@ -60,50 +60,48 @@ def test_installed_ctor_w_package_no_PKG_INFO():
     
 
 def test_installed_ctor_w_package(dodgy):
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _defaultMetadataVersion
+    from tests.unit import _helpers
 
-    EXPECTED =  _defaultMetadataVersion()
+    EXPECTED =  _helpers._defaultMetadataVersion()
 
     installed = _make_installed(dodgy)
 
     assert(installed.package is dodgy)
     assert(installed.package_name == 'namespaced.dodgy')
     assert(installed.metadata_version == EXPECTED)
-    _checkSample(None, installed)
+    _helpers._checkSample(None, installed)
 
 def test_installed_ctor_w_package_and_metadata_version(dodgy):
-    from pkginfo.tests import _checkSample
+    from tests.unit import _helpers
 
     installed = _make_installed(dodgy, metadata_version='1.2')
 
     assert(installed.package is dodgy)
     assert(installed.package.__name__ == 'namespaced.dodgy')
     assert(installed.metadata_version == '1.2')
-    _checkSample(None, installed)
+    _helpers._checkSample(None, installed)
 
 def test_installed_ctor_w_name(dodgy):
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _defaultMetadataVersion
+    from tests.unit import _helpers
 
-    EXPECTED = _defaultMetadataVersion()
+    EXPECTED = _helpers._defaultMetadataVersion()
 
     installed = _make_installed('namespaced.dodgy')
 
     assert(installed.metadata_version == EXPECTED)
     assert(installed.package is dodgy)
     assert(installed.package_name == 'namespaced.dodgy')
-    _checkSample(None, installed)
+    _helpers._checkSample(None, installed)
 
 def test_installed_ctor_w_name_and_metadata_version(dodgy):
-    from pkginfo.tests import _checkSample
+    from tests.unit import _helpers
 
     installed = _make_installed('namespaced.dodgy', metadata_version='1.2')
 
     assert(installed.package is dodgy)
     assert(installed.metadata_version == '1.2')
     assert(installed.package_name == 'namespaced.dodgy')
-    _checkSample(None, installed)
+    _helpers._checkSample(None, installed)
 
 def test_installed_ctor_w_invalid_name():
     from pkginfo.distribution import UnknownMetadataVersion
@@ -120,13 +118,13 @@ def test_installed_ctor_w_invalid_name():
     assert warned[1].category is UnknownMetadataVersion
 
 def test_installed_ctor_w_egg_info_as_file():
-    import pkginfo.tests.funny
+    import tests.unit.funny
 
-    installed = _make_installed('pkginfo.tests.funny')
+    installed = _make_installed('tests.unit.funny')
 
     assert(installed.metadata_version == '1.0')
-    assert(installed.package == pkginfo.tests.funny)
-    assert(installed.package_name == 'pkginfo.tests.funny')
+    assert(installed.package == tests.unit.funny)
+    assert(installed.package_name == 'tests.unit.funny')
 
 def test_installed_ctor_w_dist_info():
     import wheel

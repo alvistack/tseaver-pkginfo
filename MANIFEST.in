@@ -1,13 +1,13 @@
 include *.txt
-include .coveragerc
+include pyproject.toml
 include tox.ini
 recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
-recursive-include pkginfo *.py
-recursive-include pkginfo *.txt
-recursive-include pkginfo/tests PKG-INFO
-recursive-include pkginfo/tests METADATA
-recursive-include pkginfo/tests *.egg-info
+recursive-include src *.py
+recursive-include src *.pyi
+recursive-include src py.typed
+graft tests
 graft docs/examples
 prune .tox
+global-exclude *.pyc

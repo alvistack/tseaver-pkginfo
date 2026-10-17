@@ -1,6 +1,0 @@
-[run]
-source=pkginfo,pkginfo.tests
-
-[report]
-show_missing=1
-

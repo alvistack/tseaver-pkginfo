@@ -77,50 +77,46 @@ def test_get_metadata_w_wheel_and_metadata_version(test_wheel):
 
 def test_get_metadata_w_module(dodgy):
     import pkginfo
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _defaultMetadataVersion
+    from tests.unit import _helpers
     from pkginfo.utils import get_metadata
 
-    EXPECTED =  _defaultMetadataVersion()
+    EXPECTED =  _helpers._defaultMetadataVersion()
 
     dist = get_metadata(dodgy)
 
     assert(dist.metadata_version == EXPECTED)
-    _checkSample(None, dist)
+    _helpers._checkSample(None, dist)
 
 def test_get_metadata_w_module_and_metadata_version(dodgy):
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _checkClassifiers
     from pkginfo.utils import get_metadata
+    from tests.unit import _helpers
 
     dist = get_metadata(dodgy, metadata_version='1.2')
 
     assert(dist.metadata_version == '1.2')
-    _checkSample(None, dist)
-    _checkClassifiers(None, dist)
+    _helpers._checkSample(None, dist)
+    _helpers._checkClassifiers(None, dist)
 
 def test_get_metadata_w_package_name(dodgy):
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _defaultMetadataVersion
+    from tests.unit import _helpers
     from pkginfo.utils import get_metadata
 
-    EXPECTED =  _defaultMetadataVersion()
+    EXPECTED =  _helpers._defaultMetadataVersion()
 
     dist = get_metadata('namespaced.dodgy')
 
     assert(dist.metadata_version == EXPECTED)
-    _checkSample(None, dist)
+    _helpers._checkSample(None, dist)
 
 def test_get_metadata_w_package_name_and_metadata_version(dodgy):
-    from pkginfo.tests import _checkSample
-    from pkginfo.tests import _checkClassifiers
+    from tests.unit import _helpers
     from pkginfo.utils import get_metadata
 
     dist = get_metadata('namespaced.dodgy', metadata_version='1.2')
 
     assert(dist.metadata_version == '1.2')
-    _checkSample(None, dist)
-    _checkClassifiers(None, dist)
+    _helpers._checkSample(None, dist)
+    _helpers._checkClassifiers(None, dist)
 
 def test_get_metadata_w_directory_no_EGG_INFO(here):
     from pkginfo.distribution import UnknownMetadataVersion
