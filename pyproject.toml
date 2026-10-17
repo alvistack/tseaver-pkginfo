@@ -37,7 +37,7 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/tseaver/pkginfo"
 Issues = "https://github.com/tseaver/pkginfo/issues"
-Changelog = "https://github.com/tseaver/pkginfo/blob/main/CHANGES.txt"
+Changelog = "https://github.com/tseaver/pkginfo/releases"
 
 [project.optional-dependencies]
 testing = [
