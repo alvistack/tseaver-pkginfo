@@ -1,0 +1,60 @@
+# Publish the Sphinx docs to GitHub Pages for each tagged release.
+#
+# Builds the documentation from the released tag (so the version shown in
+# the navbar / sidebar blurb matches the release), and deploys the result
+# via the official "GitHub Pages" deployment, which serves the artifact
+# directly (no Jekyll processing: no `.nojekyll` needed).
+#
+# NOTE:  the repository's Pages settings must be set to serve from
+# "GitHub Actions" rather than from the (legacy, manually-pushed)
+# `gh-pages` branch for this workflow to take over publishing.
+name: Publish docs
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Run pip self-upgrade
+        run: python -m pip install --upgrade pip
+
+      - name: Install build / docs tooling
+        run: python -m pip install --upgrade . --group docs
+
+      - name: Build docs from released sources
+        run: python -m sphinx -W --color -b html docs/ _build/html
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _build/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

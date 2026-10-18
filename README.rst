@@ -9,5 +9,5 @@ the ``*.egg-info`` stored in a "development checkout"
 (e.g, created by running ``setup.py develop``).
 
 
-Please see the `pkginfo docs <http://packages.python.org/pkginfo>`_
+Please see the `pkginfo docs <https://tseaver.github.io/pkginfo>`_
 for detailed documentation.

@@ -35,6 +35,7 @@ classifiers = [
 ]
 
 [project.urls]
+Documentation = "https://tseaver.github.io/pkginfo"
 Repository = "https://github.com/tseaver/pkginfo"
 Issues = "https://github.com/tseaver/pkginfo/issues"
 Changelog = "https://github.com/tseaver/pkginfo/releases"
